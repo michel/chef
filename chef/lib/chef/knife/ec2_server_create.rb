@@ -74,6 +74,11 @@ class Chef
         :long => "--ssh-password PASSWORD",
         :description => "The ssh password"
 
+      option :use_sudo,
+        :long => "--use-sudo TRUE|FALSE",
+        :description => "Use sudo during bootstrap",
+        :default => true
+
       option :identity_file,
         :short => "-I IDENTITY_FILE",
         :long => "--identity-file IDENTITY_FILE",
@@ -206,7 +211,7 @@ class Chef
         bootstrap.config[:chef_node_name] = config[:chef_node_name] || server.id
         bootstrap.config[:prerelease] = config[:prerelease]
         bootstrap.config[:distro] = config[:distro]
-        bootstrap.config[:use_sudo] = true
+        bootstrap.config[:use_sudo] = [true, 'true', 1, '1', 'T', 't'].include?(config[:use_sudo].class == String ? config[:use_sudo].downcase : config[:use_sudo])
         bootstrap.config[:template_file] = config[:template_file]
         bootstrap
       end
